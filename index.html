@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>WhatsApp Blast | Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- LOGIN PANEL -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="logo">
+                <span class="logo-icon">🔴</span>
+                <span class="logo-text">WHATSAPP BLAST</span>
+            </div>
+            <div class="status-connection" id="adminConnectionStatus">
+                <span class="status-dot red" id="adminStatusDot"></span>
+                <span id="adminStatusText">Status: Belum Terhubung</span>
+            </div>
+            <h2>OWNER PANEL</h2>
+            <p class="subtitle">Masukkan password untuk mengakses</p>
+            <input type="password" id="passwordInput" placeholder="Password" class="login-input">
+            <button onclick="checkPassword()" class="login-btn">Akses Panel</button>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-container" id="adminContainer" style="display: none;">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <span class="sidebar-logo-text">🔴 WA BLAST</span>
+                <span class="badge-owner">OWNER</span>
+            </div>
+            <div class="connection-status-sidebar">
+                <span class="status-dot red" id="sidebarReferralStatus"></span>
+                <span>Website Referral</span>
+            </div>
+            <div class="connection-status-sidebar">
+                <span class="status-dot red" id="sidebarApkStatus"></span>
+                <span>APK WhatsApp Blast</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-tab="dashboard">📊 Dashboard</button>
+                <button class="nav-btn" data-tab="verify">✅ Verifikasi Centang Merah</button>
+                <button class="nav-btn" data-tab="announcement">📢 Pengumuman Massal</button>
+                <button class="nav-btn" data-tab="update">📲 Upload Update APK</button>
+                <button class="nav-btn" data-tab="users">👥 Data User</button>
+            </nav>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="top-bar-right">
+                    <span class="live-badge">🟢 LIVE</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+            </div>
+
+            <!-- DASHBOARD TAB -->
+            <div id="dashboardTab" class="tab-content active-tab">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalUsers">0</span>
+                            <span class="stat-label">Total User WA Blast</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🟢</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="onlineUsers">0</span>
+                            <span class="stat-label">Online Sekarang</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚫</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="offlineUsers">0</span>
+                            <span class="stat-label">Offline</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎫</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalTokens">0</span>
+                            <span class="stat-label">Total Token Beredar</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="premiumUsers">0</span>
+                            <span class="stat-label">User Premium Aktif</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📱</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="latestVersion">V1.0.0</span>
+                            <span class="stat-label">Versi Terbaru</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-section">
+                    <h3>📈 Pertumbuhan User (30 hari terakhir)</h3>
+                    <canvas id="growthChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- VERIFY TAB -->
+            <div id="verifyTab" class="tab-content">
+                <div class="card">
+                    <h3>🔴 Verifikasi Centang Merah</h3>
+                    <p class="card-desc">Kasih centang merah ke nomor, grup, atau channel WhatsApp Blast</p>
+                    <div class="verify-type">
+                        <button class="type-btn active" data-type="number">📱 Nomor</button>
+                        <button class="type-btn" data-type="group">👥 Grup</button>
+                        <button class="type-btn" data-type="channel">📢 Channel</button>
+                    </div>
+                    <input type="text" id="verifyInput" placeholder="Masukkan nomor / link grup / link channel" class="verify-input">
+                    <div class="verify-actions">
+                        <button onclick="addVerified()" class="btn-primary">➕ Kasih Centang Merah</button>
+                        <button onclick="removeVerified()" class="btn-danger">🗑️ Revoke Centang Merah</button>
+                    </div>
+                    <div class="verified-list">
+                        <h4>✅ Terverifikasi (Centang Merah)</h4>
+                        <ul id="verifiedList"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANNOUNCEMENT TAB -->
+            <div id="announcementTab" class="tab-content">
+                <div class="card">
+                    <h3>📢 Kirim Pengumuman Massal</h3>
+                    <p class="card-desc">Notifikasi akan dikirim ke SEMUA user WhatsApp Blast + Owner</p>
+                    <input type="text" id="announceTitle" placeholder="Judul Pengumuman" class="announce-input">
+                    <textarea id="announceBody" rows="5" placeholder="Isi pengumuman..." class="announce-textarea"></textarea>
+                    <div class="announce-actions">
+                        <button onclick="sendAnnouncement()" class="btn-primary">📨 Kirim ke Semua User</button>
+                        <button onclick="testAnnouncement()" class="btn-secondary">🔍 Test Kirim ke Owner Saja</button>
+                    </div>
+                    <div id="announceResult" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- UPDATE TAB -->
+            <div id="updateTab" class="tab-content">
+                <div class="card">
+                    <h3>📲 Upload & Share Update APK</h3>
+                    <p class="card-desc">Upload APK baru, uji coba dulu, lalu share ke semua user</p>
+                    <div class="update-section">
+                        <label class="upload-label">📁 Pilih File APK</label>
+                        <input type="file" id="apkFile" accept=".apk" class="file-input">
+                        <div id="fileInfo" class="file-info"></div>
+                        <div class="update-buttons">
+                            <button onclick="uploadApk()" class="btn-primary">📤 Upload APK</button>
+                            <button onclick="testApk()" class="btn-secondary" id="testBtn" disabled>🔍 Uji Coba (Download)</button>
+                            <button onclick="shareUpdate()" class="btn-success" id="shareBtn" disabled>🌍 Share ke Semua User</button>
+                        </div>
+                        <div id="updateStatus" class="status-msg"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>📜 Riwayat Update</h3>
+                    <ul id="updateHistory"></ul>
+                </div>
+            </div>
+
+            <!-- USERS TAB -->
+            <div id="usersTab" class="tab-content">
+                <div class="card">
+                    <h3>👥 Daftar User WhatsApp Blast</h3>
+                    <input type="text" id="searchUser" placeholder="Cari nomor atau username..." class="search-input">
+                    <div class="table-container">
+                        <table id="usersTable">
+                            <thead>
+                                <tr><th>No. HP</th><th>Username</th><th>Email</th><th>Token</th><th>Premium</th><th>Premium Sisa</th></tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+                                                                    </html>
