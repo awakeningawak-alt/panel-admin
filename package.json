@@ -1,0 +1,12 @@
+{
+    "name": "whatsapp-blast-admin",
+    "version": "1.0.0",
+    "description": "WhatsApp Blast Owner Admin Panel",
+    "main": "index.html",
+    "scripts": {
+        "start": "vercel dev"
+    },
+    "keywords": ["whatsapp", "blast", "admin", "owner"],
+    "author": "WhatsApp Blast Owner",
+    "license": "MIT"
+}
